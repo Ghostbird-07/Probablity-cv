@@ -1,0 +1,177 @@
+% ============================================================
+%  CHAPTER 7 -- Statistical Concepts Used in Machine Learning
+%  Presenter 7
+% ============================================================
+\section{Statistical Concepts Used in Machine Learning}
+
+\begin{frame}{Maximum Likelihood Estimation (MLE)}
+Given data $\mathcal{D} = \{x_1, \dots, x_N\}$ and parameters $\theta$:
+\[
+\hat{\theta}_{\text{MLE}} = \arg\max_{\theta}\; \prod_{i=1}^{N} P(x_i \mid \theta)
+= \arg\max_{\theta}\; \sum_{i=1}^{N} \log P(x_i \mid \theta)
+\]
+\begin{itemize}
+    \item Maximises the probability of observed data under the model.
+    \item Equivalent to minimising the \textbf{negative log-likelihood} (NLL).
+    \item Foundation of most supervised learning objectives.
+    \item \textbf{Example:} MLE for Gaussian estimates $\hat{\mu} = \bar{x}$, $\hat{\sigma}^2 = \frac{1}{N}\sum(x_i - \bar{x})^2$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum A Posteriori (MAP)}
+Incorporates a prior $P(\theta)$:
+\[
+\hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; P(\mathcal{D} \mid \theta)\, P(\theta)
+= \arg\max_{\theta}\; \left[\sum_{i=1}^{N} \log P(x_i \mid \theta) + \log P(\theta)\right]
+\]
+\begin{itemize}
+    \item Gaussian prior on $\theta$ $\Rightarrow$ \textbf{L2 regularisation} (weight decay).
+    \item Laplace prior on $\theta$ $\Rightarrow$ \textbf{L1 regularisation} (sparsity).
+    \item MAP = MLE when prior is uniform.
+    \item Bridges frequentist (MLE) and Bayesian approaches.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bias vs.\ Variance}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{block}{Bias}
+Error from overly simplistic model assumptions.\\
+High bias $\Rightarrow$ \textbf{underfitting}.
+\end{block}
+\column{0.48\textwidth}
+\begin{block}{Variance}
+Error from sensitivity to training data fluctuations.\\
+High variance $\Rightarrow$ \textbf{overfitting}.
+\end{block}
+\end{columns}
+\vspace{6pt}
+\[
+\text{Expected Error} = \text{Bias}^2 + \text{Variance} + \text{Irreducible Noise}
+\]
+\begin{itemize}
+    \item \textbf{Goal:} Find optimal model complexity that minimises total error.
+    \item Cross-validation helps estimate this trade-off empirically.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sampling, Estimation \& Hypothesis Testing}
+\begin{itemize}
+    \item \textbf{Sampling:} Drawing representative subsets from a population.
+    \begin{itemize}
+        \item Mini-batch SGD samples from training data.
+        \item Bootstrap sampling for confidence intervals.
+    \end{itemize}
+    \item \textbf{Estimation:} Using samples to infer population parameters.
+    \begin{itemize}
+        \item Point estimates (MLE, MAP) vs.\ interval estimates (confidence intervals).
+    \end{itemize}
+    \item \textbf{Hypothesis Testing:}
+    \begin{itemize}
+        \item $H_0$: null hypothesis; $H_1$: alternative hypothesis.
+        \item $p$-value: probability of observing data as extreme under $H_0$.
+        \item Used to compare model performances (e.g.\ paired $t$-test).
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Overfitting and Underfitting}
+\begin{itemize}
+    \item \textbf{Overfitting:} Model memorises training data, fails on unseen data (high variance).
+    \begin{itemize}
+        \item Remedies: regularisation, dropout, early stopping, more data.
+    \end{itemize}
+    \item \textbf{Underfitting:} Model is too simple to capture patterns (high bias).
+    \begin{itemize}
+        \item Remedies: increase model capacity, add features, train longer.
+    \end{itemize}
+    \item \textbf{Detection:}
+    \begin{itemize}
+        \item Train loss $\ll$ val loss $\Rightarrow$ overfitting.
+        \item Both losses high $\Rightarrow$ underfitting.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Applications in ML Algorithms}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{Logistic Regression}
+\begin{itemize}
+    \item Models $P(y=1 \mid x)$ via sigmoid.
+    \item Trained by MLE (cross-entropy loss).
+    \item L2 penalty = MAP with Gaussian prior.
+\end{itemize}
+\column{0.48\textwidth}
+\textbf{Neural Networks}
+\begin{itemize}
+    \item Loss functions grounded in MLE.
+    \item Dropout $\approx$ Bayesian approximation.
+    \item Batch Norm uses batch statistics.
+\end{itemize}
+\end{columns}
+\vspace{8pt}
+\textbf{Model Evaluation:}
+\begin{itemize}
+    \item Cross-validation: unbiased estimate of generalisation error.
+    \item Statistical tests to compare classifiers (McNemar's test, paired $t$-test).
+    \item Confidence intervals on metrics (Precision, Recall, F1).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical Example: MLE for Gaussian}
+\begin{exampleblock}{Problem}
+Given data $\mathcal{D}=\{3, 5, 7, 5, 10\}$. Estimate $\hat{\mu}_{\text{MLE}}$ and $\hat{\sigma}^2_{\text{MLE}}$ assuming data follows a Gaussian distribution.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+\hat{\mu}_{\text{MLE}} &= \bar{x} = \frac{3+5+7+5+10}{5} = \frac{30}{5} = \mathbf{6.0}\\[6pt]
+\hat{\sigma}^2_{\text{MLE}} &= \frac{1}{N}\sum_{i=1}^{N}(x_i - \hat{\mu})^2\\
+&= \frac{(3-6)^2+(5-6)^2+(7-6)^2+(5-6)^2+(10-6)^2}{5}\\
+&= \frac{9+1+1+1+16}{5} = \frac{28}{5} = \mathbf{5.6}
+\end{align*}
+$\hat{\sigma}_{\text{MLE}} = \sqrt{5.6} \approx \mathbf{2.366}$
+\end{frame}
+
+\begin{frame}{Numerical Example: Bias-Variance Decomposition}
+\begin{exampleblock}{Problem}
+True value: $y=10$. Three models are trained on different samples.\\
+Model A predictions: $\{9.8,\;10.1,\;10.0\}$ \quad Model B predictions: $\{8.0,\;12.0,\;10.0\}$
+\end{exampleblock}
+\textbf{Solution:}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{Model A:}
+\begin{align*}
+\bar{\hat{y}} &= 9.967\\
+\text{Bias} &= 9.967-10 = -0.033\\
+\text{Bias}^2 &= \mathbf{0.001}\\
+\text{Var} &= \mathbf{0.016}
+\end{align*}
+$\Rightarrow$ Low bias, low variance
+\column{0.48\textwidth}
+\textbf{Model B:}
+\begin{align*}
+\bar{\hat{y}} &= 10.0\\
+\text{Bias} &= 10.0-10 = 0\\
+\text{Bias}^2 &= \mathbf{0.0}\\
+\text{Var} &= \mathbf{2.667}
+\end{align*}
+$\Rightarrow$ Zero bias, high variance
+\end{columns}
+\vspace{4pt}
+\textbf{Insight:} Model A is preferred -- lower total error despite tiny bias.
+\end{frame}
+
+% --- Summary Slide ---
+\begin{frame}{Summary}
+\begin{enumerate}
+    \item Probability \& statistics are the \textbf{mathematical foundation} of ML.
+    \item Core concepts: sample spaces, Bayes' theorem, distributions, expected values.
+    \item Statistical measures guide data preprocessing and feature engineering.
+    \item Bayes' theorem and Bayesian thinking enable principled learning from data.
+    \item MLE and MAP provide the theoretical basis for training ML models.
+    \item Understanding bias--variance trade-off is key to building models that generalise.
+    \item Every ML algorithm -- from logistic regression to deep learning -- relies on statistics.
+\end{enumerate}
+\end{frame}

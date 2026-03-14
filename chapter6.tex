@@ -1,0 +1,131 @@
+% ============================================================
+%  CHAPTER 6 -- Bayes' Theorem and Bayesian Thinking
+%  Presenter 6
+% ============================================================
+\section{Bayes' Theorem and Bayesian Thinking}
+
+\begin{frame}{Bayes' Theorem}
+\begin{block}{Formula}
+\[
+\boxed{P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}}
+\]
+\end{block}
+\vspace{4pt}
+\begin{description}
+    \item[Prior] $P(A)$ -- our initial belief before seeing data.
+    \item[Likelihood] $P(B \mid A)$ -- how likely the data is under hypothesis $A$.
+    \item[Posterior] $P(A \mid B)$ -- updated belief after seeing data.
+    \item[Evidence] $P(B)$ -- normalising constant (total probability of data).
+\end{description}
+\vspace{4pt}
+\centering
+\textit{Bayes' theorem is the engine that turns data into knowledge.}
+\end{frame}
+
+\begin{frame}{Prior, Likelihood, and Posterior}
+\begin{itemize}
+    \item \textbf{Prior $P(\theta)$:} Encodes domain knowledge before observing data.
+    \begin{itemize}
+        \item Informative prior: strong belief (e.g.\ expert knowledge).
+        \item Non-informative prior: uniform or vague (lets data speak).
+    \end{itemize}
+    \item \textbf{Likelihood $P(\mathcal{D} \mid \theta)$:} How well parameters $\theta$ explain the data $\mathcal{D}$.
+    \item \textbf{Posterior $P(\theta \mid \mathcal{D})$:} Combines prior and likelihood.
+    \[
+        P(\theta \mid \mathcal{D}) \propto P(\mathcal{D} \mid \theta)\, P(\theta)
+    \]
+    \item As more data arrives, the posterior becomes dominated by the likelihood.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes Classifier}
+Classifies by computing:
+\[
+\hat{c} = \arg\max_{c}\; P(c) \prod_{i=1}^{d} P(x_i \mid c)
+\]
+\begin{itemize}
+    \item Assumes \textbf{conditional independence} of features given the class.
+    \item Despite this ``naive'' assumption, works remarkably well for:
+    \begin{itemize}
+        \item Text classification and spam filtering
+        \item Sentiment analysis
+        \item Medical diagnosis screening
+    \end{itemize}
+    \item Very fast to train -- only requires counting frequencies.
+    \item Variants: Gaussian NB, Multinomial NB, Bernoulli NB.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Inference}
+\begin{itemize}
+    \item Instead of finding a single best $\theta$, maintain a \textbf{distribution} over $\theta$.
+    \item \textbf{Prediction:} Marginalise over all possible parameters:
+    \[
+        P(y^* \mid x^*, \mathcal{D}) = \int P(y^* \mid x^*, \theta)\, P(\theta \mid \mathcal{D})\, d\theta
+    \]
+    \item Naturally handles model uncertainty and prevents overfitting.
+    \item \textbf{Challenges:} Often computationally intractable -- use approximations:
+    \begin{itemize}
+        \item Variational Inference (VI)
+        \item Markov Chain Monte Carlo (MCMC)
+        \item Monte Carlo Dropout (practical approximation)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Applications of Bayesian Thinking}
+\begin{columns}[T]
+\column{0.32\textwidth}
+\textbf{Spam Filtering}
+\begin{itemize}
+    \item Update spam probability as new emails arrive
+    \item Adapt to evolving spam patterns
+\end{itemize}
+\column{0.32\textwidth}
+\textbf{Medical Diagnosis}
+\begin{itemize}
+    \item Combine test results with base rates
+    \item Avoid false-positive pitfalls
+\end{itemize}
+\column{0.32\textwidth}
+\textbf{Text Classification}
+\begin{itemize}
+    \item Topic modelling (LDA)
+    \item Bayesian sentiment analysis
+\end{itemize}
+\end{columns}
+\vspace{8pt}
+\begin{alertblock}{Key Insight}
+Bayesian methods let us incorporate prior knowledge and \textbf{update beliefs} as evidence accumulates -- a natural framework for learning.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Numerical Example: Bayes' Theorem (Medical Test)}
+\begin{exampleblock}{Problem}
+A disease affects 1\% of the population. A test has 95\% sensitivity (true positive rate) and 90\% specificity (true negative rate).\\
+If a person tests positive, what is $P(\text{disease}\mid\text{positive})$?
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+P(D) &= 0.01, \quad P(+\mid D)=0.95, \quad P(+\mid D^c)=0.10\\[4pt]
+P(+) &= P(+\mid D)\,P(D) + P(+\mid D^c)\,P(D^c)\\
+     &= (0.95)(0.01) + (0.10)(0.99) = 0.0095 + 0.099 = 0.1085\\[4pt]
+P(D\mid +) &= \frac{P(+\mid D)\,P(D)}{P(+)} = \frac{0.0095}{0.1085} = \mathbf{0.0876 \approx 8.8\%}
+\end{align*}
+\textbf{Insight:} Despite a ``positive'' test, there's only 8.8\% chance of disease!
+\end{frame}
+
+\begin{frame}{Numerical Example: Naive Bayes Classifier}
+\begin{exampleblock}{Problem}
+Classify email with words ``free'' and ``offer'' as Spam or Ham.\\
+Given: $P(S)=0.4$, $P(H)=0.6$, $P(\text{free}\mid S)=0.8$, $P(\text{free}\mid H)=0.1$,\\
+$P(\text{offer}\mid S)=0.7$, $P(\text{offer}\mid H)=0.2$.
+\end{exampleblock}
+\textbf{Solution} (assuming feature independence):
+\begin{align*}
+P(S)\,P(\text{free}\mid S)\,P(\text{offer}\mid S) &= 0.4 \times 0.8 \times 0.7 = \mathbf{0.224}\\
+P(H)\,P(\text{free}\mid H)\,P(\text{offer}\mid H) &= 0.6 \times 0.1 \times 0.2 = \mathbf{0.012}\\[4pt]
+P(S\mid\text{free, offer}) &= \frac{0.224}{0.224+0.012} = \frac{0.224}{0.236} = \mathbf{0.949}
+\end{align*}
+\textbf{Prediction:} \textbf{Spam} with 94.9\% probability.
+\end{frame}

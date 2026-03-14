@@ -1,0 +1,95 @@
+% ============================================================
+%  CHAPTER 5 -- Statistical Measures in Data
+%  Presenter 5
+% ============================================================
+\section{Statistical Measures in Data}
+
+\begin{frame}{Mean, Median, Mode}
+\begin{description}
+    \item[Mean] $\displaystyle\bar{x} = \frac{1}{N}\sum_{i=1}^{N} x_i$ \quad (arithmetic average)
+    \item[Median] Middle value of sorted data (robust to outliers)
+    \item[Mode] Most frequently occurring value
+\end{description}
+\vspace{6pt}
+\begin{itemize}
+    \item In a symmetric distribution: mean $\approx$ median $\approx$ mode.
+    \item Skewed data: median is preferred over mean.
+    \item \textbf{ML:} Batch mean used in Batch Normalisation; median for robust estimation.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Variance \& Standard Deviation}
+\begin{block}{Formulas}
+\[
+\sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2, \qquad \sigma = \sqrt{\sigma^2}
+\]
+\end{block}
+\begin{itemize}
+    \item \textbf{Variance} $\sigma^2$: average squared deviation from the mean.
+    \item \textbf{Standard deviation} $\sigma$: same units as the data.
+    \item High variance $\Rightarrow$ data is spread out.
+    \item Low variance $\Rightarrow$ data is clustered near the mean.
+    \item \textbf{ML:} Used in feature scaling, Batch Normalisation, model evaluation.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Covariance \& Correlation}
+\textbf{Covariance:}
+\[
+\mathrm{Cov}(X,Y) = \frac{1}{N}\sum_{i=1}^{N}(x_i - \bar{x})(y_i - \bar{y})
+\]
+\textbf{Pearson Correlation Coefficient:}
+\[
+\rho_{XY} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X \, \sigma_Y}, \quad -1 \leq \rho \leq 1
+\]
+\begin{itemize}
+    \item $\rho = 1$: perfect positive correlation; $\rho = -1$: perfect negative; $\rho = 0$: no linear correlation.
+    \item \textbf{ML:} Covariance matrix is central to PCA; correlation helps detect redundant features.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Importance in ML}
+\begin{enumerate}
+    \item \textbf{Feature Scaling:}
+    \begin{itemize}
+        \item Prevents features with large ranges from dominating gradient updates.
+    \end{itemize}
+    \item \textbf{Data Normalisation:}
+    \begin{itemize}
+        \item \textbf{Min-Max:} $x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$
+        \item \textbf{Z-Score:} $x' = \frac{x - \mu}{\sigma}$ \quad (zero mean, unit variance)
+    \end{itemize}
+    \item \textbf{Understanding Spread of Data:}
+    \begin{itemize}
+        \item Helps identify outliers and class imbalance.
+        \item Guides choice of model and loss function.
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Numerical Example: Variance \& Standard Deviation}
+\begin{exampleblock}{Problem}
+Dataset: $X = \{4, 8, 6, 5, 7\}$. Compute the mean, variance, and standard deviation.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+\mu &= \frac{4+8+6+5+7}{5} = \frac{30}{5} = \mathbf{6.0}\\[4pt]
+\sigma^2 &= \frac{(4-6)^2+(8-6)^2+(6-6)^2+(5-6)^2+(7-6)^2}{5}\\
+         &= \frac{4+4+0+1+1}{5} = \frac{10}{5} = \mathbf{2.0}\\[4pt]
+\sigma &= \sqrt{2.0} = \mathbf{1.414}
+\end{align*}
+\end{frame}
+
+\begin{frame}{Numerical Example: Covariance, Correlation \& Z-Score}
+\begin{exampleblock}{Problem}
+$X=\{1,2,3,4,5\}$, $Y=\{2,4,5,4,5\}$. Find $\mathrm{Cov}(X,Y)$ and $\rho_{XY}$.\\
+Also, apply Z-score normalisation to $X$.
+\end{exampleblock}
+\textbf{Solution:} $\bar{x}=3$, $\bar{y}=4$, $\sigma_X=\sqrt{2}\approx1.414$, $\sigma_Y=\sqrt{1.2}\approx1.095$.
+\begin{align*}
+\mathrm{Cov}(X,Y) &= \frac{(1\!-\!3)(2\!-\!4)+(2\!-\!3)(4\!-\!4)+(3\!-\!3)(5\!-\!4)+(4\!-\!3)(4\!-\!4)+(5\!-\!3)(5\!-\!4)}{5}\\
+&= \frac{4+0+0+0+2}{5} = \mathbf{1.2}\\[4pt]
+\rho_{XY} &= \frac{1.2}{1.414 \times 1.095} = \frac{1.2}{1.549} = \mathbf{0.775}
+\end{align*}
+\textbf{Z-Score of $X$}: $x'_i = \frac{x_i - 3}{1.414}$ $\Rightarrow$ $\{-1.41,\;-0.71,\;0,\;0.71,\;1.41\}$
+\end{frame}

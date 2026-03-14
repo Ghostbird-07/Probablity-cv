@@ -1,0 +1,71 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{default}
+\usecolortheme{default}
+\usefonttheme{serif}
+
+% Packages
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% Color scheme: white background with blue/black accents
+\definecolor{darkblue}{RGB}{0,51,102}
+\setbeamercolor{frametitle}{fg=white,bg=darkblue}
+\setbeamercolor{title}{fg=darkblue}
+\setbeamercolor{structure}{fg=darkblue}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{block title}{bg=darkblue, fg=white}
+\setbeamercolor{block body}{bg=darkblue!5}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+% Title Information
+\title{Basics of Probability and Statistics}
+\subtitle{Chapter 5 -- Group Presentation}
+\author{Group -- 1 \\ 22dcs001 to 22dcs007}
+\date{Computer Vision Unit - 5}
+
+\begin{document}
+
+% --- Title ---
+\begin{frame}
+\titlepage
+\end{frame}
+
+% --- Table of Contents ---
+\begin{frame}{Table of Contents}
+\tableofcontents
+\end{frame}
+
+% --- Chapter Files ---
+\input{chapter1}
+\input{chapter2}
+\input{chapter3}
+\input{chapter4}
+\input{chapter5}
+\input{chapter6}
+\input{chapter7}
+
+% --- References ---
+\begin{frame}{References}
+\begin{thebibliography}{9}
+\bibitem{bishop} C.~M.~Bishop, \textit{Pattern Recognition and Machine Learning}, Springer, 2006.
+\bibitem{goodfellow} I.~Goodfellow, Y.~Bengio, A.~Courville, \textit{Deep Learning}, MIT Press, 2016.
+\bibitem{murphy} K.~P.~Murphy, \textit{Machine Learning: A Probabilistic Perspective}, MIT Press, 2012.
+\bibitem{hastie} T.~Hastie, R.~Tibshirani, J.~Friedman, \textit{The Elements of Statistical Learning}, Springer, 2009.
+\end{thebibliography}
+\end{frame}
+
+% --- Thank You ---
+\begin{frame}
+\centering
+\Huge\textbf{Thank You!}\\[12pt]
+\Large Questions?
+\end{frame}
+
+\end{document}

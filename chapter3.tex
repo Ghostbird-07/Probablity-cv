@@ -1,0 +1,134 @@
+% ============================================================
+%  CHAPTER 3 -- Random Variables
+%  Presenter 3
+% ============================================================
+\section{Random Variables}
+
+\begin{frame}{Discrete vs.\ Continuous Random Variables}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{block}{Discrete Random Variable}
+\begin{itemize}
+    \item Takes countable values
+    \item Examples: class labels, word counts, pixel categories
+    \item Described by a \textbf{PMF}
+\end{itemize}
+\end{block}
+\column{0.48\textwidth}
+\begin{block}{Continuous Random Variable}
+\begin{itemize}
+    \item Takes uncountably many values
+    \item Examples: weights, pixel intensities, loss values
+    \item Described by a \textbf{PDF}
+\end{itemize}
+\end{block}
+\end{columns}
+\vspace{6pt}
+\centering
+A random variable $X: \Omega \to \mathbb{R}$ maps outcomes to real numbers.
+\end{frame}
+
+\begin{frame}{Probability Mass Function (PMF)}
+For a discrete random variable $X$:
+\[
+p(x) = P(X = x)
+\]
+\textbf{Properties:}
+\begin{enumerate}
+    \item $p(x) \geq 0$ for all $x$.
+    \item $\displaystyle\sum_{\text{all } x} p(x) = 1$.
+\end{enumerate}
+\begin{exampleblock}{Example: Fair Die}
+$p(x) = \frac{1}{6}$ for $x \in \{1,2,3,4,5,6\}$; \quad $p(x) = 0$ otherwise.
+\end{exampleblock}
+\textbf{ML usage:} Softmax output is a PMF over class labels.
+\end{frame}
+
+\begin{frame}{Probability Density Function (PDF)}
+For a continuous random variable $X$:
+\[
+P(a \leq X \leq b) = \int_a^b f(x)\, dx
+\]
+\textbf{Properties:}
+\begin{enumerate}
+    \item $f(x) \geq 0$ for all $x$.
+    \item $\displaystyle\int_{-\infty}^{\infty} f(x)\, dx = 1$.
+    \item Note: $P(X = x) = 0$ for any single point.
+\end{enumerate}
+\begin{exampleblock}{Example: Gaussian PDF}
+$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Cumulative Distribution Function (CDF)}
+\begin{block}{Definition}
+\[
+F(x) = P(X \leq x) = \begin{cases}
+\displaystyle\sum_{t \leq x} p(t) & \text{(discrete)}\\[8pt]
+\displaystyle\int_{-\infty}^{x} f(t)\, dt & \text{(continuous)}
+\end{cases}
+\]
+\end{block}
+\textbf{Properties:}
+\begin{itemize}
+    \item $F$ is non-decreasing: $x_1 < x_2 \Rightarrow F(x_1) \leq F(x_2)$.
+    \item $\lim_{x\to-\infty} F(x) = 0$, \quad $\lim_{x\to\infty} F(x) = 1$.
+    \item $P(a < X \leq b) = F(b) - F(a)$.
+\end{itemize}
+\textbf{ML usage:} Quantile functions, threshold selection for classifiers.
+\end{frame}
+
+\begin{frame}{Expected Value (Mean of a Random Variable)}
+\begin{block}{Definition}
+\[
+\mathbb{E}[X] = \mu = \begin{cases}
+\displaystyle\sum_{x} x\, p(x) & \text{(discrete)}\\[8pt]
+\displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)}
+\end{cases}
+\]
+\end{block}
+\textbf{Key Properties:}
+\begin{itemize}
+    \item Linearity: $\mathbb{E}[aX + bY] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y]$.
+    \item $\mathbb{E}[g(X)] = \sum_x g(x)\, p(x)$ \quad (Law of the Unconscious Statistician).
+\end{itemize}
+\textbf{ML usage:}
+\begin{itemize}
+    \item Loss functions are \emph{expected} losses over the data distribution.
+    \item SGD estimates $\mathbb{E}[\nabla \mathcal{L}]$ using mini-batches.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical Example: PMF \& Expected Value}
+\begin{exampleblock}{Problem}
+A classifier predicts classes $\{0,1,2\}$ with PMF: $p(0)=0.3$, $p(1)=0.5$, $p(2)=0.2$.\\
+Find $\mathbb{E}[X]$ and $\mathbb{E}[X^2]$.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+\mathbb{E}[X] &= \sum_x x\, p(x) = 0(0.3) + 1(0.5) + 2(0.2)\\
+               &= 0 + 0.5 + 0.4 = \mathbf{0.9}\\[6pt]
+\mathbb{E}[X^2] &= 0^2(0.3) + 1^2(0.5) + 2^2(0.2)\\
+                 &= 0 + 0.5 + 0.8 = \mathbf{1.3}\\[6pt]
+\mathrm{Var}(X) &= \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = 1.3 - 0.81 = \mathbf{0.49}
+\end{align*}
+\end{frame}
+
+\begin{frame}{Numerical Example: CDF Computation}
+\begin{exampleblock}{Problem}
+Given the PMF: $p(1)=0.2$, $p(2)=0.3$, $p(3)=0.35$, $p(4)=0.15$.\\
+Find the CDF $F(x)$ and compute $P(2 < X \leq 4)$.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{table}[h]
+\centering
+\begin{tabular}{c|cccc}
+$x$ & 1 & 2 & 3 & 4\\ \hline
+$p(x)$ & 0.20 & 0.30 & 0.35 & 0.15\\
+$F(x)$ & 0.20 & 0.50 & 0.85 & 1.00
+\end{tabular}
+\end{table}
+\[
+P(2 < X \leq 4) = F(4) - F(2) = 1.00 - 0.50 = \mathbf{0.50}
+\]
+\end{frame}

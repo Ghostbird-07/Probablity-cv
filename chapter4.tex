@@ -1,0 +1,120 @@
+% ============================================================
+%  CHAPTER 4 -- Probability Distributions Used in ML
+%  Presenter 4
+% ============================================================
+\section{Probability Distributions Used in ML}
+
+\begin{frame}{Bernoulli Distribution}
+Models a single binary outcome (success/failure).
+\[
+X \sim \mathrm{Bernoulli}(p), \quad P(X=1)=p, \;\; P(X=0)=1-p
+\]
+\begin{itemize}
+    \item $\mathbb{E}[X] = p$, \quad $\mathrm{Var}(X) = p(1-p)$.
+    \item \textbf{ML usage:} Binary classification (spam/not-spam), logistic regression output.
+    \item Sigmoid function maps logits to $p \in (0,1)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Binomial Distribution}
+Sum of $n$ independent Bernoulli trials.
+\[
+P(X=k) = \binom{n}{k}\, p^k\, (1-p)^{n-k}, \quad k = 0,1,\dots,n
+\]
+\begin{itemize}
+    \item $\mathbb{E}[X] = np$, \quad $\mathrm{Var}(X) = np(1-p)$.
+    \item \textbf{ML usage:} Number of correct predictions in $n$ samples.
+    \item Approaches Gaussian for large $n$ (Central Limit Theorem).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gaussian (Normal) Distribution}
+\begin{block}{PDF}
+\[
+f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\]
+\end{block}
+\begin{itemize}
+    \item Parameterised by mean $\mu$ and variance $\sigma^2$.
+    \item Symmetric, bell-shaped curve.
+    \item \textbf{68--95--99.7 rule:} ${\approx}68\%$ within $\pm 1\sigma$, $95\%$ within $\pm 2\sigma$, $99.7\%$ within $\pm 3\sigma$.
+    \item The most important distribution in statistics and ML.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Poisson \& Uniform Distributions}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{block}{Poisson Distribution}
+\[
+P(X=k) = \frac{\lambda^k\, e^{-\lambda}}{k!}
+\]
+\begin{itemize}
+    \item Models count of rare events
+    \item $\mathbb{E}[X] = \mathrm{Var}(X) = \lambda$
+    \item ML: event counting, arrival rates
+\end{itemize}
+\end{block}
+\column{0.48\textwidth}
+\begin{block}{Uniform Distribution}
+\[
+f(x) = \frac{1}{b-a}, \quad a \leq x \leq b
+\]
+\begin{itemize}
+    \item All values equally likely
+    \item $\mathbb{E}[X] = \frac{a+b}{2}$
+    \item ML: random initialisation, non-informative prior
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Applications of Distributions in ML}
+\begin{enumerate}
+    \item \textbf{Noise Modelling:}
+    \begin{itemize}
+        \item Sensor/measurement noise $\sim \mathcal{N}(0, \sigma^2)$.
+        \item Assuming Gaussian noise leads to MSE loss.
+    \end{itemize}
+    \item \textbf{Feature Distributions:}
+    \begin{itemize}
+        \item Understanding data distribution guides preprocessing choices.
+        \item Gaussian Mixture Models (GMMs) for clustering.
+    \end{itemize}
+    \item \textbf{Bayesian Models:}
+    \begin{itemize}
+        \item Prior distributions encode domain knowledge.
+        \item Posterior distributions capture updated beliefs after observing data.
+        \item Gaussian priors $\Leftrightarrow$ L2 regularisation.
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Numerical Example: Binomial Distribution}
+\begin{exampleblock}{Problem}
+A model has 80\% accuracy ($p=0.8$). In a batch of $n=5$ predictions,\\
+find $P(\text{exactly 4 correct})$ and $P(\text{at least 4 correct})$.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+P(X=4) &= \binom{5}{4}(0.8)^4(0.2)^1 = 5 \times 0.4096 \times 0.2 = \mathbf{0.4096}\\[6pt]
+P(X=5) &= \binom{5}{5}(0.8)^5(0.2)^0 = 1 \times 0.3277 \times 1 = \mathbf{0.3277}\\[6pt]
+P(X \geq 4) &= P(X=4) + P(X=5) = 0.4096 + 0.3277 = \mathbf{0.7373}
+\end{align*}
+$\Rightarrow$ There is a 73.7\% chance of getting 4 or more correct in the batch.
+\end{frame}
+
+\begin{frame}{Numerical Example: Gaussian Distribution}
+\begin{exampleblock}{Problem}
+Feature values follow $X \sim \mathcal{N}(\mu=50,\, \sigma^2=25)$, so $\sigma=5$.\\
+Find $P(45 \leq X \leq 60)$.
+\end{exampleblock}
+\textbf{Solution:} Convert to standard normal $Z = \frac{X-\mu}{\sigma}$:
+\begin{align*}
+Z_1 &= \frac{45-50}{5} = -1.0, \qquad Z_2 = \frac{60-50}{5} = 2.0\\[6pt]
+P(45 \leq X \leq 60) &= P(-1.0 \leq Z \leq 2.0)\\
+                       &= \Phi(2.0) - \Phi(-1.0)\\
+                       &= 0.9772 - 0.1587 = \mathbf{0.8185}
+\end{align*}
+$\Rightarrow$ About 81.9\% of feature values fall between 45 and 60.
+\end{frame}

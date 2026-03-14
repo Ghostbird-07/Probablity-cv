@@ -1,0 +1,111 @@
+% ============================================================
+%  CHAPTER 2 -- Fundamentals of Probability
+%  Presenter 2
+% ============================================================
+\section{Fundamentals of Probability}
+
+\begin{frame}{Sample Space and Events}
+\begin{itemize}
+    \item A \textbf{random experiment} is a process whose outcome is uncertain.
+    \item The \textbf{sample space} $\Omega$ is the set of all possible outcomes.
+    \item An \textbf{event} $A$ is a subset of the sample space: $A \subseteq \Omega$.
+\end{itemize}
+\begin{exampleblock}{Examples}
+\begin{itemize}
+    \item Coin toss: $\Omega = \{H, T\}$; event $A=\{H\}$.
+    \item Rolling a die: $\Omega = \{1,2,3,4,5,6\}$; event ``even'' $=\{2,4,6\}$.
+    \item ML: predicting a class label $\Omega = \{c_1, c_2, \dots, c_k\}$.
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Axioms of Probability}
+\textbf{Kolmogorov Axioms:}
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $P(A) \geq 0$ for every event $A$.
+    \item \textbf{Normalization:} $P(\Omega) = 1$.
+    \item \textbf{Additivity:} For mutually exclusive events $A_1, A_2, \dots$:
+    \[
+        P\!\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)
+    \]
+\end{enumerate}
+\vspace{4pt}
+\textbf{Consequences:}
+\begin{itemize}
+    \item $P(\emptyset) = 0$
+    \item $P(A^c) = 1 - P(A)$
+    \item $0 \le P(A) \le 1$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conditional Probability}
+\begin{block}{Definition}
+\[
+P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0
+\]
+\end{block}
+\begin{itemize}
+    \item The probability of event $A$ occurring \emph{given} that $B$ has occurred.
+    \item Fundamental to updating beliefs with new evidence.
+    \item \textbf{Example:} $P(\text{spam} \mid \text{``free''})$ -- probability an email is spam given it contains the word ``free''.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Independence of Events}
+Two events $A$ and $B$ are \textbf{independent} if:
+\[
+P(A \cap B) = P(A) \cdot P(B)
+\]
+Equivalently: $P(A \mid B) = P(A)$ -- knowing $B$ tells us nothing about $A$.
+\vspace{6pt}
+\begin{itemize}
+    \item \textbf{Naive Bayes} assumes all features are conditionally independent given the class.
+    \item True independence is rare in practice, but the assumption often yields surprisingly good results.
+    \item \textbf{Mutual independence} of $n$ events requires all $2^n - n - 1$ subset conditions to hold.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Law of Total Probability}
+If $B_1, B_2, \dots, B_n$ form a \textbf{partition} of $\Omega$ (mutually exclusive, exhaustive):
+\[
+\boxed{P(A) = \sum_{i=1}^{n} P(A \mid B_i)\, P(B_i)}
+\]
+\begin{itemize}
+    \item Breaks a complex probability into simpler conditional pieces.
+    \item Essential building block for \textbf{Bayes' theorem}.
+    \item \textbf{ML application:} Marginalising over latent variables:
+    \[
+        P(x) = \sum_{z} P(x \mid z)\, P(z)
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical Example: Conditional Probability}
+\begin{exampleblock}{Problem}
+A bag has 5 red and 3 blue balls. Two balls are drawn without replacement.\\
+Find $P(\text{2nd is red} \mid \text{1st is red})$.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{itemize}
+    \item After drawing 1 red ball: remaining = 4 red + 3 blue = 7 balls.
+    \item $P(\text{2nd red} \mid \text{1st red}) = \dfrac{4}{7} \approx \mathbf{0.571}$
+\end{itemize}
+\textbf{Verification using formula:}
+\[
+P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{5/8 \times 4/7}{5/8} = \frac{4}{7} \approx 0.571 \;\checkmark
+\]
+\end{frame}
+
+\begin{frame}{Numerical Example: Law of Total Probability}
+\begin{exampleblock}{Problem}
+Factory has 3 machines. Machine A produces 50\% of items (2\% defective), Machine B produces 30\% (3\% defective), Machine C produces 20\% (5\% defective).\\
+Find the probability that a randomly chosen item is defective.
+\end{exampleblock}
+\textbf{Solution:}
+\begin{align*}
+P(D) &= P(D\mid A)\,P(A) + P(D\mid B)\,P(B) + P(D\mid C)\,P(C)\\
+     &= (0.02)(0.50) + (0.03)(0.30) + (0.05)(0.20)\\
+     &= 0.010 + 0.009 + 0.010\\
+     &= \mathbf{0.029} \quad \text{(2.9\% defective overall)}
+\end{align*}
+\end{frame}

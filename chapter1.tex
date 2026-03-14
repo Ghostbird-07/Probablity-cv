@@ -1,0 +1,117 @@
+% ============================================================
+%  CHAPTER 1 -- Introduction to Probability & Statistics in ML
+%  Presenter 1
+% ============================================================
+\section{Introduction to Probability \& Statistics in ML}
+
+\begin{frame}{Why Probability Is Important in ML}
+\begin{itemize}
+    \item Real-world data is inherently \textbf{noisy} and \textbf{incomplete}.
+    \item ML models must \emph{quantify uncertainty} to make reliable predictions.
+    \item Probability provides a principled framework for:
+    \begin{itemize}
+        \item Reasoning under uncertainty
+        \item Making optimal decisions
+        \item Learning from data
+    \end{itemize}
+    \item Without probability, we cannot distinguish confident predictions from random guesses.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Role of Uncertainty in Data}
+\begin{block}{Sources of Uncertainty}
+\begin{enumerate}
+    \item \textbf{Aleatoric uncertainty} -- inherent randomness in data (e.g.\ sensor noise).
+    \item \textbf{Epistemic uncertainty} -- lack of knowledge, reducible with more data.
+\end{enumerate}
+\end{block}
+\vspace{6pt}
+\begin{itemize}
+    \item Uncertainty affects every stage: data collection, feature extraction, prediction.
+    \item Probabilistic models can \emph{separate} these sources and handle each appropriately.
+    \item Crucial in safety-critical systems (medical, autonomous vehicles).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deterministic vs.\ Probabilistic Models}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{block}{Deterministic}
+\begin{itemize}
+    \item Fixed output for a given input
+    \item $y = f(x) = Wx + b$
+    \item No notion of confidence
+    \item Simpler but less informative
+\end{itemize}
+\end{block}
+\column{0.48\textwidth}
+\begin{block}{Probabilistic}
+\begin{itemize}
+    \item Output is a \emph{distribution}
+    \item $P(y \mid x;\, \theta)$
+    \item Captures prediction uncertainty
+    \item Enables risk-aware decisions
+\end{itemize}
+\end{block}
+\end{columns}
+\vspace{6pt}
+\centering
+\textit{Most modern ML models are inherently probabilistic.}
+\end{frame}
+
+\begin{frame}{Examples in ML}
+\begin{enumerate}
+    \item \textbf{Classification probability:}
+    \begin{itemize}
+        \item Softmax outputs give $P(\text{class}\mid\text{input})$.
+        \item Example: ``90\% cat, 8\% dog, 2\% bird''.
+    \end{itemize}
+    \item \textbf{Prediction uncertainty:}
+    \begin{itemize}
+        \item Regression models can output $\mu \pm \sigma$ (mean $\pm$ std.\ dev.).
+        \item Bayesian Neural Networks provide full posterior distributions.
+    \end{itemize}
+    \item \textbf{Anomaly detection:}
+    \begin{itemize}
+        \item Data points with low probability under the learned distribution are flagged.
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Real-World Examples}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{Spam Detection}
+\begin{itemize}
+    \item Naive Bayes classifier uses $P(\text{spam}\mid\text{words})$.
+    \item Computes likelihood of each word appearing in spam vs.\ ham.
+    \item Decision threshold balances false positives/negatives.
+\end{itemize}
+\column{0.48\textwidth}
+\textbf{Medical Diagnosis}
+\begin{itemize}
+    \item $P(\text{disease}\mid\text{symptoms, tests})$.
+    \item Bayes' theorem updates diagnosis as new test results arrive.
+    \item Probability helps doctors weigh risks vs.\ benefits of treatment.
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Numerical Example: Softmax Classification}
+\begin{exampleblock}{Problem}
+A neural network outputs logits $\mathbf{z} = [2.0,\; 1.0,\; 0.5]$ for classes Cat, Dog, Bird.\\
+Compute the softmax probabilities.
+\end{exampleblock}
+\textbf{Solution:}
+\[
+\hat{y}_c = \frac{e^{z_c}}{\sum_j e^{z_j}}
+\]
+\begin{align*}
+e^{2.0} &= 7.389, \quad e^{1.0} = 2.718, \quad e^{0.5} = 1.649\\[4pt]
+\text{Sum} &= 7.389 + 2.718 + 1.649 = 11.756\\[4pt]
+P(\text{Cat}) &= \frac{7.389}{11.756} = \mathbf{0.629}, \quad
+P(\text{Dog}) = \frac{2.718}{11.756} = \mathbf{0.231}\\[2pt]
+P(\text{Bird}) &= \frac{1.649}{11.756} = \mathbf{0.140}
+\end{align*}
+\textbf{Prediction:} Cat (62.9\% confidence). \quad $\checkmark\; \sum P = 1.0$
+\end{frame}
